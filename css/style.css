@@ -1,0 +1,483 @@
+/*
+This file is part of Youless Monitor.
+
+Youless Monitor is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Youless Monitor is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+html, body {
+	font-family:Verdana, sans-serif;
+	font-size:10px;
+	color:#2d2d2d;
+}
+
+ul {
+	list-style-type:none;
+}
+
+table {
+	border-collapse:collapse;
+}
+
+a {
+	color:black;
+}
+
+.overlay {
+	position:fixed;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	z-index:1000;
+	display:none;
+}
+
+.dialog {
+	position:absolute;
+	top:150px;
+	left:-100px;
+	margin-left:50%;
+	padding:20px;
+	border:1px
+solid #e5e5e5;
+	background:#f1f1f1;
+	z-index:1001;
+	box-shadow:0px 0px 12px rgba(0,  0,  0,  0.50);
+	-moz-box-shadow:0px 0px 12px rgba(0,  0,  0,  0.50);
+	-webkit-box-shadow:0px 0px 12px rgba(0, 0, 0, 0.50);
+}
+
+.overlayBack {
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	background:white;
+	opacity:0.5;
+}
+
+#dialogSucces {
+	width:200px;
+	height:100px;
+}
+
+#dialogCredits {
+	width:300px;
+	height:150px;
+}
+
+.closeDialog {
+	position:absolute;
+	bottom:10px;
+	left:50%;
+	margin-left:-60px;
+}
+
+#loginForm {
+	position:absolute;
+	top:50%;
+	left:-200px;
+	margin-left:50%;
+	width:400px;
+	height:200px;
+	border:1px
+solid #e5e5e5;
+	background:#f1f1f1;
+}
+
+#loginForm
+table {
+	margin:30px;
+	width:360px;
+}
+
+#loginForm input[type=text],  #loginForm input[type=password] {
+	width:170px;
+}
+
+#loginForm input[type=submit] {
+	margin:40px
+0 0 110px;
+}
+
+#invalidLogin {
+	height:16px;
+	color:red;
+	text-align:center;
+}
+
+#settingsOverlay {
+	position:absolute;
+	top:25px;
+	left:-250px;
+	margin-left:50%;
+	width:500px;
+	height:400px;
+	border:1px
+solid #e5e5e5;
+	background:#f1f1f1;
+	z-index:1000;
+	box-shadow:0px 0px 12px rgba(0,  0,  0,  0.50);
+	-moz-box-shadow:0px 0px 12px rgba(0,  0,  0,  0.50);
+	-webkit-box-shadow:0px 0px 12px rgba(0,  0,  0,  0.50);
+	display:none;
+}
+
+#settingsOverlay
+table {
+	margin:25px;
+}
+
+
+#topHeader {
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	height:25px;
+	color:#d2d2d2;
+	background:-moz-linear-gradient(top,  #474747 0%,  #363636 100%);
+	background:-webkit-gradient(linear,  left top,  left bottom,  color-stop(0%, #474747),  color-stop(100%, #363636));
+	background:-webkit-linear-gradient(top,  #474747 0%, #363636 100%);
+	background:-o-linear-gradient(top,  #474747 0%, #363636 100%);
+	background:-ms-linear-gradient(top,  #474747 0%, #363636 100%);
+	background:linear-gradient(top,  #474747 0%, #363636 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#474747',  endColorstr='#363636', GradientType=0 );
+}
+
+#settings {
+	position:absolute;
+	top:4px;
+	right:120px;
+	height:16px;
+	width:85px;
+	text-align:right;
+	background:url('../img/settings.png') no-repeat 0 0;
+}
+
+#logout {
+	position:absolute;
+	top:4px;
+	right:30px;
+	height:16px;
+	width:55px;
+	text-align:right;
+	background:url('../img/logout.png') no-repeat 0 0;
+}
+
+#topHeader
+a {
+	color:#fff;
+	text-decoration:none;
+	font-size:10px;
+	line-height:16px;
+}
+
+#header {
+	position:absolute;
+	left:0;
+	top:25px;
+	right:0;
+	height:80px;
+	border-bottom:1px solid #e5e5e5;
+	background:#f1f1f1;
+}
+
+#footer {
+	position:absolute;
+	height: 15px;
+	left:0;
+	bottom:0;
+	width:100%;
+	text-align: right;
+	background:#f1f1f1;
+	;
+}
+
+#version {
+	position:absolute;
+	padding-left:25px;
+	text-align:left;
+	background:#f1f1f1;
+}
+
+#range {
+	position:absolute;
+	display:none;
+	top:25px;
+	right:330px;
+	height:30px;
+	width:170px;
+	line-height:15px;
+	padding-left:40px;
+	text-align:left;
+	background:url('../img/calendar.png') no-repeat 0 0;
+}
+
+
+
+#cpkwhCounter {
+	position:absolute;
+	display:none;
+	top:25px;
+	right:220px;
+	height:30px;
+	width:70px;
+	line-height:15px;
+	padding-left:40px;
+	text-align:left;
+	background:url('../img/price.png') no-repeat 0 0;
+}
+
+
+
+#wattCounter {
+	position:absolute;
+	top:25px;
+	right:570px;
+	height:30px;
+	width:90px;
+	line-height:30px;
+	text-align:right;
+	background:url('../img/watt.png') no-repeat 0 0;
+}
+
+#meter {
+	position:absolute;
+	top:25px;
+	right:675px;
+	height:30px;
+	width:143px;
+	line-height:15px;
+	text-align:right;
+	vertical-align:middle;
+	background:url('../img/kwh.png') no-repeat 0 0;
+}
+
+#kwhCounter {
+	position:absolute;
+	top:25px;
+	right:50px;
+	height:30px;
+	width:100px;
+	padding-left:40px;
+	line-height:15px;
+	text-align:left;
+	vertical-align:middle;
+	background:url('../img/kwh.png') no-repeat 0 0;
+}
+
+.isLow {
+	color:blue;
+}
+
+.countUp {
+	color:red;
+}
+
+.countDown {
+	color:green;
+}
+
+#logo {
+	position:absolute;
+	top:20px;
+	left:10px;
+	width:125px;
+	height:40px;
+	background:url('../img/logo.png') no-repeat 0 0;
+}
+
+#menu {
+	position:absolute;
+	top:16px;
+	left:150px;
+	background:url('../img/chart.png') no-repeat 0 13px;
+}
+
+#header
+ul.btn {
+	list-style-type:none;
+}
+
+#header ul.btn
+li {
+	display:block;
+	float:left;
+}
+
+#header ul.btn
+a {
+	height:25px;
+	display:block;
+	color:#2d2d2d;
+	text-decoration:none;
+}
+
+#header ul.btn li:first-child {
+	border-width:1px;
+	-webkit-border-radius:4px 0 0 4px;
+	-moz-border-radius:4px 0 0 4px;
+	-ms-border-radius:4px 0 0 4px;
+	-o-border-radius:4px 0 0 4px;
+	border-radius:4px 0 0 4px;
+}
+
+#header ul.btn li:last-child {
+	border-width:1px 1px 1px 0px;
+	-webkit-border-radius:0 4px 4px 0;
+	-moz-border-radius:0 4px 4px 0;
+	-ms-border-radius:0 4px 4px 0;
+	-o-border-radius:0 4px 4px 0;
+	border-radius:0 4px 4px 0;
+}
+
+#header ul.btn
+li {
+	background:#ececec;
+	border-style:solid;
+	border-color:#c6c6c6;
+	border-width:1px 1px 1px 0px;
+	line-height:25px;
+	padding:0;
+	text-align:center;
+	width:45px;
+	cursor:pointer;
+}
+
+#header ul.btn li:hover,  #header ul.btn
+li.selected {
+	background:#e5e5e5;
+}
+
+#container {
+	position:absolute;
+	left:0;
+	top:106px;
+	right:0;
+	padding:20px
+10px;
+	background:white;
+}
+
+#datepickContainer {
+	display:none;
+	height:25px;
+	width:225px;
+	border:1px
+solid #e5e5e5;
+	background:url('../img/calendar.png') no-repeat 6px 3px #f1f1f1;
+}
+
+#datepicker {
+	margin:4px
+4px 4px 32px;
+	width:122px;
+}
+
+#history {
+	display:none;
+	height:500px;
+	min-width:500px;
+}
+
+input[type=submit], input[type=button] {
+	background:#4D90FE;
+	border:1px
+solid #3079ED;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	-ms-border-radius:4px;
+	-o-border-radius:4px;
+	border-radius:4px;
+	color:#fff;
+	line-height:1;
+	padding:6px
+0 9px;
+	text-align:center;
+	width:120px;
+	cursor:pointer;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+	background:#3079ED;
+}
+
+input[type=submit].saved {
+	background:#3D9400;
+	border:1px
+solid #3D9400;
+}
+
+input[type=submit].notsaved {
+	background:#dd4b39;
+	border:1px
+solid #D14836;
+}
+
+input[type=submit].notsaved:hover {
+	background:#D14836;
+}
+
+form {
+	margin:20px
+0;
+}
+
+#translate_field
+textarea {
+	font-family:Verdana, sans-serif;
+	font-size:10px;
+	border:1px
+solid #d2d2d2;
+}
+
+textarea[name=meta_description] {
+	width:250px;
+	height:50px;
+	resize:none;
+}
+
+textarea[name=meta_keywords] {
+	width:250px;
+	height:50px;
+	resize:none;
+}
+
+#translate_field input[type=text],  #translate_field input[type=password] {
+	width:250px;
+	border:1px
+solid #d2d2d2;
+	margin:2px;
+}
+
+#translate_field input[type=text]:focus,  #translate_field input[type=password]:focus,  #translate_field textarea:focus {
+	border:1px
+solid #3079ED;
+	outline:none;
+}
+
+input[type=text], input[type=password] {
+	border:1px
+solid #d2d2d2;
+	margin:2px
+0 2px 0px;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+	border:1px
+solid #3079ED;
+	outline:none;
+}
