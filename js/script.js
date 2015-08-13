@@ -172,229 +172,230 @@ function createChart(target, date){
 			if(jsonData["ok"] == 0)
 			{
 				$('#message').text(jsonData["msg"]);
-				$('#overlay').fadeIn();
+				$('#overlaySucces').fadeIn();
 			}
-			
-			// Format data
-			jsDate = jsonData["start"].split("-");
-			year = jsDate[0];
-			month = jsDate[1]-1;
-			day = jsDate[2]-0;
-			hour = jsDate[3]-0;
-			minute = jsDate[4]-0;
-			
-			var start = (new Date(year, month, day, hour, minute)).getTime();
-			var approximation = "average";
+			else
+			{
+				// Format data
+				jsDate = jsonData["start"].split("-");
+				year = jsDate[0];
+				month = jsDate[1]-1;
+				day = jsDate[2]-0;
+				hour = jsDate[3]-0;
+				minute = jsDate[4]-0;
+				
+				var start = (new Date(year, month, day, hour, minute)).getTime();
+				var approximation = "average";
 
-			if(target == 'day')
-			{
-				var title = 'Dagverbruik';
-				var type = 'areaspline';
-				var serieName = 'Watt';
-				var yTitle = {
-	                text: 'Watt',
-	                margin: 40
-	            };			
-				var rangeSelector = false;
-				var navScroll = true;
-				var pointInterval = 60 * 1000;
-				var tickInterval = null;
-				var plotLines = null;											
-				var buttons = [{
-								type: 'hour',
-								count: 1,
-								text: '1u'
-							}, {
-								type: 'hour',
-								count: 12,
-								text: '12u'
-							}, {
-								type: 'day',
-								count: 1,
-								text: 'dag'
-							}];
-			}
-			else if(target == 'week')
-			{
-				var title = 'Weekverbruik';
-				var type = 'areaspline';
-				var serieName = 'Watt';
-				var yTitle = {
-	                text: 'Watt',
-	                margin: 40
-	            };					
-				var rangeSelector = true;
-				var navScroll = true;
-				var pointInterval = 60 * 1000;
-				var tickInterval = null;
-				var plotLines = [{
-					value: start + (24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (2 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (3 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (4 *24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (5 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (6 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				}];										
-				var buttons = [{
-								type: 'hour',
-								count: 1,
-								text: '1u'
-							}, {
-								type: 'hour',
-								count: 12,
-								text: '12u'
-							}, {
-								type: 'day',
-								count: 1,
-								text: 'dag'
-							}, {
-								type: 'week',
-								count: 1,
-								text: 'week'
-							}];
-			}
-			else if(target == 'month')
-			{
-				var title = 'Maandverbruik';
-				var type = 'column';
-				var serieName = 'Watt';
-				var yTitle = {
-	                text: 'Watt',
-	                margin: 40
-	            };					
-				var rangeSelector = false;
-				var navScroll = false;
-				var pointInterval = 60 * 1000;
-				var tickInterval = null;
-				var plotLines = [{
-					value: start + (7 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (14 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (21 * 24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				},{
-					value: start + (28 *24 * 60 * 60 * 1000),
-					width: 1, 
-					color: '#c0c0c0'
-				}];										
-			}
-			else if(target == 'year')
-			{
-				var title = 'Jaarverbruik';
-				var type = 'column';
-				var serieName = 'Watt';
-				var yTitle = {
-	                text: 'Watt',
-	                margin: 40
-	            };					
-				var rangeSelector = true;
-				var navScroll = true;
-				var pointInterval = 60 * 1000;
-				var tickInterval = null;
-				var plotLines = null;
-				var buttons = [];
-			}
+				if(target == 'day')
+				{
+					var title = 'Dagverbruik';
+					var type = 'areaspline';
+					var serieName = 'Watt';
+					var yTitle = {
+		                text: 'Watt',
+		                margin: 40
+		            };			
+					var rangeSelector = false;
+					var navScroll = true;
+					var pointInterval = 60 * 1000;
+					var tickInterval = null;
+					var plotLines = null;											
+					var buttons = [{
+									type: 'hour',
+									count: 1,
+									text: '1u'
+								}, {
+									type: 'hour',
+									count: 12,
+									text: '12u'
+								}, {
+									type: 'day',
+									count: 1,
+									text: 'dag'
+								}];
+				}
+				else if(target == 'week')
+				{
+					var title = 'Weekverbruik';
+					var type = 'areaspline';
+					var serieName = 'Watt';
+					var yTitle = {
+		                text: 'Watt',
+		                margin: 40
+		            };					
+					var rangeSelector = true;
+					var navScroll = true;
+					var pointInterval = 60 * 1000;
+					var tickInterval = null;
+					var plotLines = [{
+						value: start + (24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (2 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (3 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (4 *24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (5 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (6 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					}];										
+					var buttons = [{
+									type: 'hour',
+									count: 1,
+									text: '1u'
+								}, {
+									type: 'hour',
+									count: 12,
+									text: '12u'
+								}, {
+									type: 'day',
+									count: 1,
+									text: 'dag'
+								}, {
+									type: 'week',
+									count: 1,
+									text: 'week'
+								}];
+				}
+				else if(target == 'month')
+				{
+					var title = 'Maandverbruik';
+					var type = 'column';
+					var serieName = 'Watt';
+					var yTitle = {
+		                text: 'Watt',
+		                margin: 40
+		            };					
+					var rangeSelector = false;
+					var navScroll = false;
+					var pointInterval = 60 * 1000;
+					var tickInterval = null;
+					var plotLines = [{
+						value: start + (7 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (14 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (21 * 24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					},{
+						value: start + (28 *24 * 60 * 60 * 1000),
+						width: 1, 
+						color: '#c0c0c0'
+					}];										
+				}
+				else if(target == 'year')
+				{
+					var title = 'Jaarverbruik';
+					var type = 'column';
+					var serieName = 'Watt';
+					var yTitle = {
+		                text: 'Watt',
+		                margin: 40
+		            };					
+					var rangeSelector = true;
+					var navScroll = true;
+					var pointInterval = 60 * 1000;
+					var tickInterval = null;
+					var plotLines = null;
+					var buttons = [];
+				}
+										
+				
+				// Parse values to integers
+				data = jsonData["val"].split(",");
+				for(var i=0; i<data.length; i++) { data[i] = parseFloat(data[i], 10); } 
+
+				// Create the chart
+				historychart = new Highcharts.StockChart({
+					chart: {
+						renderTo : 'history',
+						type: type,			
+						events: {
+							load: function () {
+	           
+									var min = this.xAxis[0].getExtremes().min,
+										max = this.xAxis[0].getExtremes().max;
 									
-			
-			// Parse values to integers
-			data = jsonData["val"].split(",");
-			for(var i=0; i<data.length; i++) { data[i] = parseFloat(data[i], 10); } 
-
-			// Create the chart
-			historychart = new Highcharts.StockChart({
-				chart: {
-					renderTo : 'history',
-					type: type,			
-					events: {
-						load: function () {
-           
-								var min = this.xAxis[0].getExtremes().min,
-									max = this.xAxis[0].getExtremes().max;
+									calculateRange(min,max);
+									//requestLiveData();
+									//getMeter();
+							}
+						}
+					},			
+					credits: {
+						enabled: false
+					},
+					title: {
+						text : title
+					},	
+					yAxis: {
+						showFirstLabel: false,
+						title: yTitle
+					},
+					xAxis: {
+						type: 'datetime',
+						tickInterval: tickInterval,
+						plotLines: plotLines,
+						events: {
+							afterSetExtremes: function () {
+								var min = this.min,
+									max = this.max;
 								
 								calculateRange(min,max);
-								//requestLiveData();
 								//getMeter();
+							}
 						}
-					}
-				},			
-				credits: {
-					enabled: false
-				},
-				title: {
-					text : title
-				},	
-				yAxis: {
-					showFirstLabel: false,
-					title: yTitle
-				},
-				xAxis: {
-					type: 'datetime',
-					tickInterval: tickInterval,
-					plotLines: plotLines,
-					events: {
-						afterSetExtremes: function () {
-							var min = this.min,
-								max = this.max;
-							
-							calculateRange(min,max);
-							//getMeter();
+					},	
+					rangeSelector: {
+						selected: 3,
+						enabled: rangeSelector,
+						buttons: buttons
+					},							
+					navigator: {
+						enabled: navScroll
+					},									
+					scrollbar: {
+						enabled: navScroll
+					},						
+					series : [{
+						name : serieName,
+						turboThreshold: 5000,
+						data : data ,
+						pointStart: start,
+		            	pointInterval: pointInterval,
+						dataGrouping: {
+							approximation: approximation 
+						},
+						tooltip: {
+							valueDecimals: 2
 						}
-					}
-				},	
-				rangeSelector: {
-					selected: 3,
-					enabled: rangeSelector,
-					buttons: buttons
-				},							
-				navigator: {
-					enabled: navScroll
-				},									
-				scrollbar: {
-					enabled: navScroll
-				},						
-				series : [{
-					name : serieName,
-					turboThreshold: 5000,
-					data : data ,
-					pointStart: start,
-	            	pointInterval: pointInterval,
+					}],
 					dataGrouping: {
-						approximation: approximation 
-					},
-					tooltip: {
-						valueDecimals: 2
+						enabled: false
 					}
-				}],
-				dataGrouping: {
-					enabled: false
-				}
-			});	
-			
-			calculate(target, date);
+				});	
 				
+				calculate(target, date);
+			}	
 		},
 		cache: false
 	});
