@@ -17,17 +17,19 @@
 - PHP curl extension (zie beneden)
 - PHP pdo_mysql extension (standaard sinds 5.1 op *NIX en sinds 5.3 onder Windows)
 
-## Setup 
+## Nieuwe installatie 
 1. Pas 'settings.inc.php.example' aan en hernoem het naar 'settings.inc.php' (in de map 'inc')
-2. Nieuwe setup: roep `install.php` aan.
-3. Verwijder `install.php` en `update.php`.
-4. Voeg een uurlijkse cronjob toe die `cronjob.php` aanroept. Bijvoorbeeld:
+2. Kopieer de bestanden naar je webserver.
+3. Roep `install.php` aan.
+4. Verwijder `install.php` en `update.php`.
+5. Voeg een uurlijkse cronjob toe die `cronjob.php` aanroept. Bijvoorbeeld:
    `0 * * * * /usr/bin/php /home/htdocs/huis/cronjob.php`  
    Zie beneden voor meer uitleg.  
-5. Default username/password is admin/admin
+6. Default username/password is admin/admin
 
 ## Update 
-Deze beschrijving voor een updata vanaf een oudere versie van dit script (van voor dat deze op GitHub stond).
+Gebruik deze beschrijving voor een updata vanaf een oudere versie van dit script (van voor dat deze op GitHub stond).
+
 1. Maak een goede back-up!
 2. Kopieer en vervang de bestanden in de bestaande installatie met de nieuwere versie.
 3. Kopieer de relevante instellingen uit de bestaande `settings.inc.php` naar `settings.inc.php.example` (in de map `inc`).
@@ -55,9 +57,10 @@ http://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/
 #### Windows
 Onder windows kun je de Task Scheduler gebruiken om regelmatig het script aan te roepen. 
 Hier staat een duidelijke tutorial hoe dat gaat in de verschillende versies van windows:
-http://www.7tutorials.com/how-create-task-basic-task-wizard
+http://www.7tutorials.com/how-create-task-basic-task-wizard  
+
 Voeg daarbij een taak toe, ongeveer als deze (natuurlijk de juiste paden gebruiken):
-`C:\Xampp\php\php.exe -f C:\Xampp\htdocs\my_script.php`
+`C:\Xampp\php\php.exe -f C:\Xampp\htdocs\my_script.php`  
 De `-f` parameter is hierbij belangrijk om PHP te laten weten dat je een extern bestand wilt uitvoeren.
 
 ## Licentie
