@@ -19,51 +19,44 @@
 
 ## Setup 
 1. Pas 'settings.inc.php.example' aan en hernoem het naar 'settings.inc.php' (in de map 'inc')
-2. Nieuwe setup: roep 'install.php' aan.
-3. Verwijder 'install.php' en 'update.php'.
-4. Voeg een uurlijkse cronjob toe die 'cronjob.php' aanroept. Bijvoorbeeld:
-
-   `0 * * * * /usr/bin/php /home/htdocs/huis/cronjob.php`
-   Zie beneden voor meer uitleg.
+2. Nieuwe setup: roep `install.php` aan.
+3. Verwijder `install.php` en `update.php`.
+4. Voeg een uurlijkse cronjob toe die `cronjob.php` aanroept. Bijvoorbeeld:
+   `0 * * * * /usr/bin/php /home/htdocs/huis/cronjob.php`  
+   Zie beneden voor meer uitleg.  
 5. Default username/password is admin/admin
 
 ## Update 
 Deze beschrijving voor een updata vanaf een oudere versie van dit script (van voor dat deze op GitHub stond).
-0. Maak een goede back-up!
-1. Kopieer en vervang de bestanden in de bestaande installatie met de nieuwere versie.
-2. Kopieer de relevante instellingen uit de bestaande 'settings.inc.php' naar 'settings.inc.php.example' (in de map 'inc').
-3. Hernoem 'settings.inc.php.example' naar 'settings.inc.php' en gooi de oude settings weg.
-4. Roep 'update.php' aan.
-5. Controleer of de cronjob inderdaad het bestand 'cronjob.php' aanroept en corrigeer dit eventueel (sommige oude versies gebruikte een andere naam voor dit bestand)
+1. Maak een goede back-up!
+2. Kopieer en vervang de bestanden in de bestaande installatie met de nieuwere versie.
+3. Kopieer de relevante instellingen uit de bestaande `settings.inc.php` naar `settings.inc.php.example` (in de map `inc`).
+4. Hernoem `settings.inc.php.example` naar `settings.inc.php` en gooi de oude settings weg.
+5. Roep `update.php` aan.
+6. Controleer of de cronjob inderdaad het bestand `cronjob.php` aanroept en corrigeer dit eventueel (sommige oude versies gebruikte een andere naam voor dit bestand)
 
 ## CURL
-Als CURL niet standaard is ingeschakeld op je webserver of je nog geen webserver hebt geïinstalleerd.
-
+Bij veel webhosters is CURL standaard ingeschakeld, maar als je zelf een server beheert, is CURL mogelijk niet standaard is ingeschakeld of je hebt nog geen webserver hebt geïnstalleerd.
 ### Windows
 CURL zit standaard wel in PHP hier, maar is niet direct ingeschakeld. Daarvoor moet je de `php.ini` aanpassen. 
 Bij gebruik van XAMPP (ook bij andere installatie) is dit een goede uitleg:
 http://stackoverflow.com/questions/3020049/how-to-enable-curl-in-xampp
-
 ### Linux
 Installeer de `php5-curl` package met het commando `sudo apt-get install php5-curl` en herstart de server. 
 Zie hier voor een meer gedetaileerde uitleg: http://askubuntu.com/questions/9293/how-do-i-install-curl-in-php5
 
 ## Cronjob
 Een Cronjob is een taak die periodiek wordt uitgevoerd op Linux systemen. Dit is nodig om regelmatig de laatste statistieken van de Youless te downloaden.
-
-### Linux
-Gebruik het commando `crontab -e` om de cronjobs aan te kunnen passen. Zie het voorbeeld hierboven voor hoe het commando er ongeveer uit dient te zien.
+#### Linux
+Gebruik het commando `crontab -e` om de cronjobs aan te kunnen passen. Zie het voorbeeld hierboven (onder `setup`) voor hoe het commando er ongeveer uit dient te zien.
 
 Voor een uitgebreide tutorial in het gebruik van Crontab kun je hier kijken:
 http://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/
-
-### Windows
+#### Windows
 Onder windows kun je de Task Scheduler gebruiken om regelmatig het script aan te roepen. 
 Hier staat een duidelijke tutorial hoe dat gaat in de verschillende versies van windows:
 http://www.7tutorials.com/how-create-task-basic-task-wizard
-
 Voeg daarbij een taak toe, ongeveer als deze (natuurlijk de juiste paden gebruiken):
-
 `C:\Xampp\php\php.exe -f C:\Xampp\htdocs\my_script.php`
 De `-f` parameter is hierbij belangrijk om PHP te laten weten dat je een extern bestand wilt uitvoeren.
 
