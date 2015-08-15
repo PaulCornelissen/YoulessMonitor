@@ -16,18 +16,16 @@
 - PHP 5.2
 - PHP curl extension (zie beneden)
 - PHP pdo_mysql extension (standaard sinds 5.1 op *NIX en sinds 5.3 onder Windows)
+Het installatiescript controleert automatisch of aan de voorwaarden is voldaan.
 
 ## Nieuwe installatie 
-1. Pas 'settings.inc.php.example' aan en hernoem het naar 'settings.inc.php' (in de map 'inc')
-2. Kopieer de bestanden naar je webserver.
-3. Roep `install.php` aan.
-4. Verwijder `install.php` en `update.php`.
-5. Voeg een uurlijkse cronjob toe die `cronjob.php` aanroept. Bijvoorbeeld:
+1. Kopieer de bestanden naar de webserver.
+2. Roep `install.php` aan en volg de stappen op het scherm.
+3. Voeg een uurlijkse cronjob toe die `cronjob.php` aanroept. Bijvoorbeeld:
    `0 * * * * /usr/bin/php /home/htdocs/huis/cronjob.php`  
    Zie beneden voor meer uitleg.  
-6. Default username/password is admin/admin
 
-## Update 
+## Update -Op dit moment mogelijk broken!-
 Gebruik deze beschrijving voor een updata vanaf een oudere versie van dit script (van voor dat deze op GitHub stond).
 
 1. Maak een goede back-up!
@@ -45,7 +43,8 @@ Bij gebruik van XAMPP (ook bij andere installatie) is dit een goede uitleg:
 http://stackoverflow.com/questions/3020049/how-to-enable-curl-in-xampp
 ### Linux
 Installeer de `php5-curl` package met het commando `sudo apt-get install php5-curl` en herstart de server. 
-Zie hier voor een meer gedetaileerde uitleg: http://askubuntu.com/questions/9293/how-do-i-install-curl-in-php5
+Zie hier voor een meer gedetaileerde uitleg: 
+http://askubuntu.com/questions/9293/how-do-i-install-curl-in-php5  
 
 ## Cronjob
 Een Cronjob is een taak die periodiek wordt uitgevoerd op Linux systemen. Dit is nodig om regelmatig de laatste statistieken van de Youless te downloaden.
