@@ -66,9 +66,16 @@ if((isset($_SESSION['user_id']) && $_SESSION['user_id'] != false) || NO_LOGIN)
 		}
 		elseif ( $range == 'year') {
 
-			$begin = date('Y-m-d', strtotime("-1 year",time()));
-			//$end = date('Y-m-d',strtotime("+1 day",strtotime($sqlDate)));
-			$end = date('Y-m-d',strtotime("+1 day",time()));
+			$begin = date('Y-m-d',strtotime("first day of January",strtotime($sqlDate)));
+			$endOfYearTimestamp = strtotime("last day of december",strtotime($sqlDate)) - 86400;
+			$endOfTodayTimestamp = strtotime("+1 day",time());
+			if($endOfTodayTimestamp > $endOfTodayTimestamp) 
+			{
+				$end = date('Y-m-d', $endOfTodayTimestamp);
+			}
+			else {
+				$end = date('Y-m-d', $endOfYearTimestamp);
+			}
 
 			$rows = $db->getSpecificRange($begin, $end);
 		}
