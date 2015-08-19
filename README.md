@@ -16,6 +16,7 @@
 - PHP 5.2
 - PHP curl extension (zie beneden)
 - PHP pdo_mysql extension (standaard sinds 5.1 op *NIX en sinds 5.3 onder Windows)
+
 Het installatiescript controleert automatisch of aan de voorwaarden is voldaan.
 
 ## Nieuwe installatie 
@@ -30,9 +31,7 @@ Gebruik deze beschrijving voor een updata vanaf een oudere versie van dit script
 
 1. Maak een goede back-up!
 2. Kopieer en vervang de bestanden in de bestaande installatie met de nieuwere versie.
-3. Kopieer de relevante instellingen uit de bestaande `settings.inc.php` naar `settings.inc.php.example` (in de map `inc`).
-4. Hernoem `settings.inc.php.example` naar `settings.inc.php` en gooi de oude settings weg.
-5. Roep `update.php` aan.
+5. Roep `install.php` aan en volg de stappen op het scherm.
 6. Controleer of de cronjob inderdaad het bestand `cronjob.php` aanroept en corrigeer dit eventueel (sommige oude versies gebruikte een andere naam voor dit bestand)
 
 ## CURL

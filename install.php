@@ -35,6 +35,7 @@ along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
 		
 <?php
 
+	$settingsFile = realpath(dirname(__FILE__)) . "/inc/settings.inc.php";
 	$errorMsg = '';
 	$ok = true;
 
@@ -60,34 +61,20 @@ along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
 	}
 	
 	echo $errorMsg;
+
+	// If any error's occured, we don't continue.
 	if($ok)
 	{
+		// We only continue if the install form has been sent, otherwise we show the form.
 		if(isset($_POST['install']) && $_POST['install'] == "1") {
+
+			// First we write the settings to file
 			$public = "false";
 			$debug = "false";
 			if(isset($_POST['public']) && $_POST['public'] == "true") $public = "true";
 			if(isset($_POST['debug']) && $_POST['debug'] == "true") $debug = "true";
 
 			$settings = "<?php
-/*
-This file is part of Youless Monitor.
-
-Youless Monitor is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Youless Monitor is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-// Rename to settings.inc.php
-
 // DB Settings
 define('DB_HOST', '" . $_POST['DBHOST'] . "');	
 define('DB_NAME', '" . $_POST['DBNAME'] . "');
@@ -106,11 +93,12 @@ define('NO_LOGIN', " . $public . ");
 define('VERBOSE', " . $debug . ");
 ?>";
 
-			$file = realpath(dirname(__FILE__)) . "/inc/testsettings2.inc.php";
 			if($debug == 'true') echo "Generated settings:<br>" . nl2br(htmlspecialchars($settings)) . "<br><br>";
 
-			file_put_contents($file, $settings);
+			file_put_contents($settingsFile, $settings);
 
+
+			// We construct a query to create and/or update the database
 			define('DB_HOST', $_POST['DBHOST']);	
 			define('DB_NAME', $_POST['DBNAME']);
 			define('DB_USER', $_POST['DBUSER']);
@@ -143,17 +131,19 @@ define('VERBOSE', " . $debug . ");
 					  UNIQUE KEY `key` (`key`)
 					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;	
 
-					INSERT INTO  `".DB_NAME."`.`" . DB_PREFIX . "settings` (`key`, `value`) VALUES
+					INSERT IGNORE INTO  `".DB_NAME."`.`" . DB_PREFIX . "settings` (`key`, `value`) VALUES
 					('cpkwh', '0.22'),
 					('cpkwh_low', '0.21'),
 					('dualcount', '1'),
 					('cpkwhlow_start', '23:00'),
 					('cpkwhlow_end', '07:00'),
 					('liveinterval', '1000'),
-					('version','2.2.0'),
-					('LastUpdate_UnixTime', '0'),
 					('livelengte', '60000'),
 					('cooldown', '60');
+
+					REPLACE INTO `".DB_NAME."`. `" . DB_PREFIX . "settings` (`key`, `value`) VALUES
+					('version','2.2.0'),
+					('LastUpdate_UnixTime', '0');
 									
 					CREATE TABLE IF NOT EXISTS  `".DB_NAME."`.`" . DB_PREFIX . "users` (
 					  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -172,9 +162,13 @@ define('VERBOSE', " . $debug . ");
 					INSERT INTO  `".DB_NAME."`.`" . DB_PREFIX . "meter` (`time`, `count`, `islow`) VALUES
 					( '2013-01-01','0','0' ),
 					( '2013-01-01','0','1' );
-						
-					INSERT INTO  `".DB_NAME."`.`" . DB_PREFIX . "users` (`id`, `username`, `password`) VALUES
+					";
+				
+				if(!isset($_POST['upgrade']))
+				{
+					$query .= "REPLACE INTO  `".DB_NAME."`.`" . DB_PREFIX . "users` (`id`, `username`, `password`) VALUES
 					(2, '" . $_POST['USER'] . "', '" . sha1($_POST['PASS']) . "'); ";
+				}
 
 			    $succes = $db->exec($query);
 				
@@ -204,25 +198,60 @@ define('VERBOSE', " . $debug . ");
 				echo '<p class="error"><b>Error:</b> couldn\'t delete update file!<br>U dient het bestand <b>update.php</b> zelf te verwijderen!</p>';
 			}
 		}
+		// We show a form to collect the data required for installation.
 		else {
-			echo '<p class="error"><b>Pas op:</b> vul dit formulier secuur in!</p>
+			$upgrade = false;
+			if (file_exists($settingsFile)) {
+				// Settings file allready exists, so we want to upgrade
+				include($settingsFile);
+				$upgrade = true;
+			}
+
+			// We check if all required settings are present
+			if(!DEFINED('DB_HOST')) 	define('DB_HOST', 'localhost');	
+			if(!DEFINED('DB_NAME')) 	define('DB_NAME', 'youless');
+			if(!DEFINED('DB_USER')) 	define('DB_USER', 'youless');
+			if(!DEFINED('DB_PASS')) 	define('DB_PASS', 'password');
+			if(!DEFINED('DB_PREFIX')) 	define('DB_PREFIX', 'YL_');
+			if(!DEFINED('YL_ADDRESS')) 	define('YL_ADDRESS', '192.168.0.125');
+			if(!DEFINED('YL_PASSWORD')) define('YL_PASSWORD', '');
+			if(!DEFINED('NO_LOGIN')) 	define('PUBLIC_CHECKED', '');
+			else {
+				if(NO_LOGIN) define('PUBLIC_CHECKED', ' checked');
+				else define('PUBLIC_CHECKED', '');
+			}
+			if(!DEFINED('VERBOSE')) 	define('DEBUG', '');
+			else {
+				if(VERBOSE) define('DEBUG', ' checked');
+				else define('DEBUG', '');
+			}
+
+			// We show a form to acquire all data
+			if($upgrade) echo '			<p class="error"><b>Pas op:</b> Er is een bestaande installatie gedetecteerd. De bestaande instelling zijn hieronder overgenomen. Controleer deze a.u.b. goed.</p>
+';
+			echo '			<p class="error"><b>Pas op:</b> Vul dit formulier secuur in!</p>
 				<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="post">
-					<input type="hidden" name="install" value="1">
+					<input type="hidden" name="install" value="1">';
+			if($upgrade) echo '
+					<input type="hidden" name="upgrade" value="1">';
+			echo '
 					<table>
-						<tr><td>Database hostname*: 		</td><td><input type="text" name="DBHOST" value="localhost"></td>
-						<tr><td>Database name*:				</td><td><input type="text" name="DBNAME" value="youless"></td>
-						<tr><td>Database user*:				</td><td><input type="text" name="DBUSER" value=""></td>
-						<tr><td>Database password*:			</td><td><input type="password" name="DBPASS" value=""></td>
-						<tr><td>Table prefix:<br><br>		</td><td><input type="text" name="DBPREFIX" value="YL_"><br><br></td>
+						<tr><td>Database hostname*: 		</td><td><input type="text" name="DBHOST" value="' . DB_HOST . '"></td>
+						<tr><td>Database name*:				</td><td><input type="text" name="DBNAME" value="' . DB_NAME . '"></td>
+						<tr><td>Database user*:				</td><td><input type="text" name="DBUSER" value="' . DB_USER . '"></td>
+						<tr><td>Database password*:			</td><td><input type="password" name="DBPASS" value="' . DB_PASS . '"></td>
+						<tr><td>Table prefix:<br><br>		</td><td><input type="text" name="DBPREFIX" value="' . DB_PREFIX . '"><br><br></td>
 
-						<tr><td>Youless adress*:			</td><td><input type="text" name="YLADDRESS" value=""></td>
-						<tr><td>Youless password:<br><br>	</td><td><input type="password" name="YLPASS" value=""><br><br></td>
-
+						<tr><td>Youless adress*:			</td><td><input type="text" name="YLADDRESS" value="' . YL_ADDRESS . '"></td>
+						<tr><td>Youless password:<br><br>	</td><td><input type="password" name="YLPASS" value="' . YL_PASSWORD . '"><br><br></td>
+';
+			if(!$upgrade) echo '
 						<tr><td>Website username*:			</td><td><input type="text" name="USER" value="admin"></td>
 						<tr><td>Website password:<br><br>	</td><td><input type="password" name="PASS" value="admin"><small>(default: admin)</small><br><br></td>
-
-						<tr><td colspan="2">		<input type="checkbox" name="public" value="true"> Disable authentication?</td>
-						<tr><td colspan="2">		<input type="checkbox" name="debug" value="true"> Enable debug output? (recommended: off!)<br><br></td>
+';
+			echo '
+						<tr><td colspan="2">		<input type="checkbox" name="public" value="true"' . PUBLIC_CHECKED . '> Disable authentication?</td>
+						<tr><td colspan="2">		<input type="checkbox" name="debug" value="true"' . DEBUG . '> Enable debug output? (recommended: off!)<br><br></td>
 						<tr><td>							</td><td><input type="submit" value="Installatie beginnen!"></td>
 					</table>
 				</form>';
@@ -231,6 +260,6 @@ define('VERBOSE', " . $debug . ");
 ?>
 			</div>
 		</div>
-	<div id="footer"><?PHP //include("inc/date-modified.php");?></div>
+	<div id="footer"><?PHP include("inc/date-modified.php");?></div>
 	</body>
 </html>
