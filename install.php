@@ -176,7 +176,7 @@ define('VERBOSE', " . $debug . ");
 				{
 					echo "<p style='color:green;'>Database installatie succesvol.</p>";
 					echo "<p style='color:green;'>Gebruikersnaam en wachtwoord zijn opgeslagen.</p>";
-					if($debug) echo "<p><b>Debug informatie:</b><br>" . nl2br($query) . "</p>";
+					if($debug == 'true') echo "<p><b>Debug informatie:</b><br>" . nl2br($query) . "</p>";
 				}
 			} catch (PDOException $e) {
 			    die(print("<p class='error'>Database error: ". $e->getMessage() ."</p>"));
@@ -184,19 +184,33 @@ define('VERBOSE', " . $debug . ");
 			
 
 			// We try to automatically delete the install.php and update.php file
-			if(unlink(realpath(dirname(__FILE__)) . "/install.php")) {
-				echo "<p style='color:green;'>Automatische verwijdering install.php succesvol!</p>";
+			$installpath = realpath(dirname(__FILE__)) . "/install.php";
+			$updatepath = realpath(dirname(__FILE__)) . "/update.php";
+			if(file_exists($installpath))
+			{
+				if(unlink($installpath)) {
+					echo "<p style='color:green;'>Automatische verwijdering install.php succesvol!</p>";
+				}
+				else {
+					echo '<p class="error"><b>Error:</b> couldn\'t self delete! U dient het bestand <b>install.php</b> zelf te verwijderen!</p>';
+				}
 			}
 			else {
-				echo '<p class="error"><b>Error:</b> couldn\'t self delete!<br>U dient het bestand <b>install.php</b> zelf te verwijderen!</p>';
+				echo '<p class="error"><b>Error:</b> Kan het bestand <b>install.php</b> niet vinden! Dit is ongewoon. Controleer zelf of het installatiebestand verwijdert is!</p>';
 			}
 
-			if(unlink(realpath(dirname(__FILE__)) . "/update.php")) {
-				echo "<p style='color:green;'>Automatische verwijdering update.php succesvol!</p>";
+			if(file_exists($updatepath))
+			{
+				if(unlink($updatepath)) {
+					echo "<p style='color:green;'>Automatische verwijdering update.php succesvol!</p>";
+				}
+				else {
+					echo '<p class="error"><b>Error:</b> couldn\'t delete update file! U dient het bestand <b>update.php</b> zelf te verwijderen!</p>';
+				}
 			}
-			else {
-				echo '<p class="error"><b>Error:</b> couldn\'t delete update file!<br>U dient het bestand <b>update.php</b> zelf te verwijderen!</p>';
-			}
+
+			echo '<p><b>Volgende stap:</b><br>Maak een cronjob op uw server. Zie de readme voor meer uitleg.<br>
+			Als geheugensteuntje het pad naar het script:<br>' . htmlspecialchars(realpath(dirname(__FILE__))) . '/cronjob.php</p>';
 		}
 		// We show a form to collect the data required for installation.
 		else {
@@ -251,7 +265,7 @@ define('VERBOSE', " . $debug . ");
 ';
 			echo '
 						<tr><td colspan="2">		<input type="checkbox" name="public" value="true"' . PUBLIC_CHECKED . '> Disable authentication?</td>
-						<tr><td colspan="2">		<input type="checkbox" name="debug" value="true"' . DEBUG . '> Enable debug output? (recommended: off!)<br><br></td>
+						<tr><td colspan="2">		<input type="checkbox" name="debug" value="true"' . DEBUG . '> Enable debug output? <b>(recommended: off!)</b><br><br></td>
 						<tr><td>							</td><td><input type="submit" value="Installatie beginnen!"></td>
 					</table>
 				</form>';
