@@ -25,7 +25,6 @@ along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
 		<link type="text/css" href="css/style.min.css" rel="stylesheet" />
 	</head>
 	<body>
-				
 		<div id="topHeader"></div>
 		<div id="header">
 			<div id="logo"></div>
@@ -43,12 +42,7 @@ along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
 	{
 		$errorMsg .= '<p class="error"><b>PHP 5.2.0</b> is vereist</p>';
 		$ok = false;
-	}	
-//	if(!file_exists('inc/settings.inc.php'))
-//	{
-//		$errorMsg .= '<p class="error"><b>settings.inc.php</b> ontbreekt, pas <b>settings.inc.php.example</b> aan en hernoem deze naar <b>settings.inc.php</b></p>';
-//		$ok = false;
-//	}
+	}
 	if(!extension_loaded('pdo_mysql'))
 	{
 		$errorMsg .= '<p class="error"><b>PDO Mysql</b> extension ontbreekt!</p>';
@@ -93,7 +87,7 @@ define('NO_LOGIN', " . $public . ");
 define('VERBOSE', " . $debug . ");
 ?>";
 
-			if($debug == 'true') echo "Generated settings:<br>" . nl2br(htmlspecialchars($settings)) . "<br><br>";
+			if($debug == 'true') echo "Gegenereerde instellingen:<br>" . nl2br(htmlspecialchars($settings)) . "<br><br>";
 
 			file_put_contents($settingsFile, $settings);
 
@@ -174,12 +168,17 @@ define('VERBOSE', " . $debug . ");
 				
 				if($succes > 0)
 				{
-					echo "<p style='color:green;'>Database installatie succesvol.</p>";
-					echo "<p style='color:green;'>Gebruikersnaam en wachtwoord zijn opgeslagen.</p>";
+					if(isset($_POST['upgrade'])) {
+						echo "<p style='color:green;'>Database succesvol bijgewerkt.</p>";
+					}
+					else {
+						echo "<p style='color:green;'>Database installatie succesvol.</p>";
+						echo "<p style='color:green;'>Gebruikersnaam en wachtwoord zijn opgeslagen.</p>";
+					}
 					if($debug == 'true') echo "<p><b>Debug informatie:</b><br>" . nl2br($query) . "</p>";
 				}
 			} catch (PDOException $e) {
-			    die(print("<p class='error'>Database error: ". $e->getMessage() ."</p>"));
+			    die(print("<p class='error'>Database fout: ". $e->getMessage() ."</p>"));
 			}
 			
 
@@ -192,11 +191,11 @@ define('VERBOSE', " . $debug . ");
 					echo "<p style='color:green;'>Automatische verwijdering install.php succesvol!</p>";
 				}
 				else {
-					echo '<p class="error"><b>Error:</b> couldn\'t self delete! U dient het bestand <b>install.php</b> zelf te verwijderen!</p>';
+					echo '<p class="error"><b>Fout:</b> dit script kon zichzelf niet verwijderen! U dient het bestand <b>install.php</b> zelf te verwijderen!</p>';
 				}
 			}
 			else {
-				echo '<p class="error"><b>Error:</b> Kan het bestand <b>install.php</b> niet vinden! Dit is ongewoon. Controleer zelf of het installatiebestand verwijdert is!</p>';
+				echo '<p class="error"><b>Fout:</b> Kan het bestand <b>install.php</b> niet vinden! Dit is ongewoon. Controleer zelf of het installatiebestand verwijdert is!</p>';
 			}
 
 			if(file_exists($updatepath))
@@ -205,7 +204,7 @@ define('VERBOSE', " . $debug . ");
 					echo "<p style='color:green;'>Automatische verwijdering update.php succesvol!</p>";
 				}
 				else {
-					echo '<p class="error"><b>Error:</b> couldn\'t delete update file! U dient het bestand <b>update.php</b> zelf te verwijderen!</p>';
+					echo '<p class="error"><b>Fout:</b> kon het bestand niet verwijderen! U dient het bestand <b>update.php</b> zelf te verwijderen!</p>';
 				}
 			}
 
@@ -225,7 +224,7 @@ define('VERBOSE', " . $debug . ");
 			if(!DEFINED('DB_HOST')) 	define('DB_HOST', 'localhost');	
 			if(!DEFINED('DB_NAME')) 	define('DB_NAME', 'youless');
 			if(!DEFINED('DB_USER')) 	define('DB_USER', 'youless');
-			if(!DEFINED('DB_PASS')) 	define('DB_PASS', 'password');
+			if(!DEFINED('DB_PASS')) 	define('DB_PASS', 'wachtwoord');
 			if(!DEFINED('DB_PREFIX')) 	define('DB_PREFIX', 'YL_');
 			if(!DEFINED('YL_ADDRESS')) 	define('YL_ADDRESS', '192.168.0.125');
 			if(!DEFINED('YL_PASSWORD')) define('YL_PASSWORD', '');
@@ -250,23 +249,23 @@ define('VERBOSE', " . $debug . ");
 					<input type="hidden" name="upgrade" value="1">';
 			echo '
 					<table>
-						<tr><td>Database hostname*: 		</td><td><input type="text" name="DBHOST" value="' . DB_HOST . '"></td>
-						<tr><td>Database name*:				</td><td><input type="text" name="DBNAME" value="' . DB_NAME . '"></td>
-						<tr><td>Database user*:				</td><td><input type="text" name="DBUSER" value="' . DB_USER . '"></td>
-						<tr><td>Database password*:			</td><td><input type="password" name="DBPASS" value="' . DB_PASS . '"></td>
-						<tr><td>Table prefix:<br><br>		</td><td><input type="text" name="DBPREFIX" value="' . DB_PREFIX . '"><br><br></td>
+						<tr><td>Database hostname*: 			</td><td><input type="text" name="DBHOST" value="' . DB_HOST . '"></td>
+						<tr><td>Database naam*:					</td><td><input type="text" name="DBNAME" value="' . DB_NAME . '"></td>
+						<tr><td>Database gebruikersnaam*:		</td><td><input type="text" name="DBUSER" value="' . DB_USER . '"></td>
+						<tr><td>Database wachtwoord*:			</td><td><input type="password" name="DBPASS" value="' . DB_PASS . '"></td>
+						<tr><td>Tabelnaamvoorvoegsel:<br><br>	</td><td><input type="text" name="DBPREFIX" value="' . DB_PREFIX . '"><br><br></td>
 
-						<tr><td>Youless adress*:			</td><td><input type="text" name="YLADDRESS" value="' . YL_ADDRESS . '"></td>
-						<tr><td>Youless password:<br><br>	</td><td><input type="password" name="YLPASS" value="' . YL_PASSWORD . '"><br><br></td>
+						<tr><td>Youless adres*:					</td><td><input type="text" name="YLADDRESS" value="' . YL_ADDRESS . '"></td>
+						<tr><td>Youless wachtwoord:<br><br>		</td><td><input type="password" name="YLPASS" value="' . YL_PASSWORD . '"><br><br></td>
 ';
 			if(!$upgrade) echo '
-						<tr><td>Website username*:			</td><td><input type="text" name="USER" value="admin"></td>
-						<tr><td>Website password:<br><br>	</td><td><input type="password" name="PASS" value="admin"><small>(default: admin)</small><br><br></td>
+						<tr><td>Website gebruikersnaam*:		</td><td><input type="text" name="USER" value="admin"></td>
+						<tr><td>Website wachtwoord:<br><br>		</td><td><input type="password" name="PASS" value="admin"><small>(standaard: admin)</small><br><br></td>
 ';
 			echo '
-						<tr><td colspan="2">		<input type="checkbox" name="public" value="true"' . PUBLIC_CHECKED . '> Disable authentication?</td>
-						<tr><td colspan="2">		<input type="checkbox" name="debug" value="true"' . DEBUG . '> Enable debug output? <b>(recommended: off!)</b><br><br></td>
-						<tr><td>							</td><td><input type="submit" value="Installatie beginnen!"></td>
+						<tr><td colspan="2">	<input type="checkbox" name="public" value="true"' . PUBLIC_CHECKED . '> Inloggen uitschakelen?</td>
+						<tr><td colspan="2">	<input type="checkbox" name="debug" value="true"' . DEBUG . '> Debug output weergeven? <b>(aangeraden: UIT!)</b><br><br></td>
+						<tr><td>								</td><td><input type="submit" value="Installatie beginnen!"></td>
 					</table>
 				</form>';
 		}
