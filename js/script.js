@@ -34,39 +34,49 @@ function requestLiveData() {
         		setTimeout(requestLiveData, interval); 
         		return;
         	}
-        	            // add the point
-            var x = (new Date()).getTime();
-            var y = json["pwr"];
+        	
+        	// check to see if the response was positive
+        	if(json["ok"] == 0) {
+	        	// json error
+				$('#message').text(json["msg"]);
+				$('#overlaySucces').fadeIn();
+	        }
+	        else {
 
-            var series = chart.series[0],
-                shift = series.data.length > shiftMax; // shift if the series is longer than shiftMax
+	        	// add the point
+	            var x = (new Date()).getTime();
+	            var y = json["pwr"];
 
-            //    console.log("Interval: " + interval + " livelengte: " + $('#settingsOverlay').data('livelengte') + " shiftmax: " + shiftMax + " shift: " + shift);
+	            var series = chart.series[0],
+	                shift = series.data.length > shiftMax; // shift if the series is longer than shiftMax
+
+	            //    console.log("Interval: " + interval + " livelengte: " + $('#settingsOverlay').data('livelengte') + " shiftmax: " + shiftMax + " shift: " + shift);
 
 
+	            chart.series[0].addPoint([x, y], true, shift);
 
-            chart.series[0].addPoint([x, y], true, shift);
+	            // up/down indicator
+	            if(tmpWatt < parseInt(json["pwr"])){
+	            	updown = "countUp";
+	            }
+	            else if(tmpWatt == parseInt(json["pwr"])){
+	            	updown = "";
+	            }
+	            else
+	            {
+	            	updown = "countDown";
+	            }
+	            tmpWatt = parseInt(json["pwr"]);
+	            
+	            // update counter
+	            $('#wattCounter').html("<span class='"+updown+"'>"+json["pwr"]+" Watt</span>");            
 
-            // up/down indicator
-            if(tmpWatt < parseInt(json["pwr"])){
-            	updown = "countUp";
-            }
-            else if(tmpWatt == parseInt(json["pwr"])){
-            	updown = "";
-            }
-            else
-            {
-            	updown = "countDown";
-            }
-            tmpWatt = parseInt(json["pwr"]);
-            
-            // update counter
-            $('#wattCounter').html("<span class='"+updown+"'>"+json["pwr"]+" Watt</span>");            
+				// getMeter();
+	            
+	            // call it again after set interval
+	            setTimeout(requestLiveData, interval);
 
-			// getMeter();
-            
-            // call it again after set interval
-            setTimeout(requestLiveData, interval);    
+	        }
         },
 	    error: function (xhr, ajaxOptions, thrownError) {
 	        // an error occured, let's try again in a bit
@@ -214,6 +224,7 @@ function createChart(target, date){
 									count: 1,
 									text: 'dag'
 								}];
+					var plotOptions = null;
 				}
 				else if(target == 'week')
 				{
@@ -266,10 +277,11 @@ function createChart(target, date){
 									count: 1,
 									text: 'dag'
 								}, {
-									type: 'week',
-									count: 1,
+									type: 'day',
+									count: 7,
 									text: 'week'
 								}];
+					var plotOptions = null;
 				}
 				else if(target == 'month')
 				{
@@ -300,7 +312,23 @@ function createChart(target, date){
 						value: start + (28 *24 * 60 * 60 * 1000),
 						width: 1, 
 						color: '#c0c0c0'
-					}];										
+					}];	
+					var plotOptions =  {
+			            cursor: 'pointer',
+			            point: {
+			                events: {
+			                    click: function() {
+			                        var dt = this.category;
+			                        var target = "day";
+			                        date = $.datepicker.formatDate("yy-mm-dd", new Date(dt));
+			                        $('#datepicker').datepicker('setDate', date);
+			                        $('#history').data('chart', target);
+			                        console.log("target: " + target);
+			                        showChart(target);
+			                    }
+			                }
+			            }
+				    };
 				}
 				else if(target == 'year')
 				{
@@ -317,6 +345,22 @@ function createChart(target, date){
 					var tickInterval = null;
 					var plotLines = null;
 					var buttons = [];
+					var plotOptions =  {
+			            cursor: 'pointer',
+			            point: {
+			                events: {
+			                    click: function() {
+			                        var dt = this.category;
+			                        var target = "day";
+			                        date = $.datepicker.formatDate("yy-mm-dd", new Date(dt));
+			                        $('#datepicker').datepicker('setDate', date);
+			                        $('#history').data('chart', target);
+			                        console.log("target: " + target);
+			                        showChart(target);
+			                    }
+			                }
+			            }
+				    };
 				}
 										
 				
@@ -375,7 +419,7 @@ function createChart(target, date){
 					},									
 					scrollbar: {
 						enabled: navScroll
-					},						
+					},
 					series : [{
 						name : serieName,
 						turboThreshold: 5000,
@@ -389,6 +433,9 @@ function createChart(target, date){
 							valueDecimals: 2
 						}
 					}],
+	            	plotOptions: {
+				        series: plotOptions
+				    },
 					dataGrouping: {
 						enabled: false
 					}
@@ -401,6 +448,31 @@ function createChart(target, date){
 	});
 }		
 
+function showChart(chart) {
+	$('.chart').hide();
+	$('.'+chart).show();
+	
+	$('.btn li').each(function(){
+		$(this).removeClass('selected');
+	});
+	$('#'+chart).addClass('selected');
+	$('#history').data('chart', chart);
+	
+	if(chart != 'live')
+	{
+		// Generate loading screen
+		if(loadingEnabled)
+		{
+			historychart.showLoading();
+		}
+		else
+		{
+			loadingEnabled = true;
+		}
+		//createChart(chart, $('#datepicker').val());
+		refreshData(chart, $('#datepicker').val());
+	}
+}
 			
 $(document).ready(function() {
 
@@ -495,29 +567,7 @@ $(document).ready(function() {
 	// Show chart
 	$('.showChart').click(function(){
 		var chart = $(this).data('chart');
-		$('.chart').hide();
-		$('.'+chart).show();
-		
-		$('.btn li').each(function(){
-			$(this).removeClass('selected');
-		});
-		$(this).parent().addClass('selected');
-		$('#history').data('chart', chart);
-		
-		if(chart != 'live')
-		{
-			// Generate loading screen
-			if(loadingEnabled)
-			{
-				historychart.showLoading();
-			}
-			else
-			{
-				loadingEnabled = true;
-			}
-			//createChart(chart, $('#datepicker').val());
-			refreshData(chart, $('#datepicker').val());
-		}
+		showChart(chart);
 	});
 	
 	

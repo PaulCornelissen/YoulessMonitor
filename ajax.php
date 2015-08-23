@@ -291,11 +291,11 @@ if((isset($_SESSION['user_id']) && $_SESSION['user_id'] != false) || NO_LOGIN)
 	}	
 	else
 	{
-		echo "Error!";
+		echo '{"ok": 0, "msg":"Fout: Verkeerd geformuleerd verzoek!"}';
 	}
 }
 else
 {
-	echo "Login required!";
+	echo '{"ok": 0, "msg":"Fout: Login required!"}';
 }
 ?>

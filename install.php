@@ -253,7 +253,7 @@ define('VERBOSE', " . $debug . ");
 						<tr><td>Database naam*:					</td><td><input type="text" name="DBNAME" value="' . DB_NAME . '"></td>
 						<tr><td>Database gebruikersnaam*:		</td><td><input type="text" name="DBUSER" value="' . DB_USER . '"></td>
 						<tr><td>Database wachtwoord*:			</td><td><input type="password" name="DBPASS" value="' . DB_PASS . '"></td>
-						<tr><td>Tabelnaamvoorvoegsel:<br><br>	</td><td><input type="text" name="DBPREFIX" value="' . DB_PREFIX . '"><br><br></td>
+						<tr><td>Tabelnaamvoorvoegsel:<br><br>	</td><td><input type="text" name="DBPREFIX" value="' . DB_PREFIX . '"><small>(Als je upgrade heeft je database waarschijnlijk geen prefix.)</small><br><br></td>
 
 						<tr><td>Youless adres*:					</td><td><input type="text" name="YLADDRESS" value="' . YL_ADDRESS . '"></td>
 						<tr><td>Youless wachtwoord:<br><br>		</td><td><input type="password" name="YLPASS" value="' . YL_PASSWORD . '"><br><br></td>
