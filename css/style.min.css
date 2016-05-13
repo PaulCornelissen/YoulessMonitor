@@ -208,9 +208,8 @@ a {
 
 #version {
 	position:absolute;
-	padding-left:25px;
-	text-align:left;
-	background:#f1f1f1;
+	right: 10px;
+	bottom: 10px;
 }
 
 #range {
