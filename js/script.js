@@ -206,6 +206,34 @@ function createChart(target, date){
 		                text: 'Watt',
 		                margin: 40
 		            };			
+                    var plotLinesY = [{
+                        value: 180,
+                        dashStyle: 'dash',
+                        width: 2,
+                        color: 'green',
+                        label: {
+                            text: 'Sluip verbruik',
+                            align: 'right'
+                        }
+                    }, {
+                        value: 500,
+                        dashStyle: 'dash',
+                        width: 2,
+                        color: 'orange',
+                        label: {
+                            text: 'Normaal verbruik',
+                            align: 'right'
+                        }
+                    }, {
+                        value: 3000,
+                        dashStyle: 'dash',
+                        width: 2,
+                        color: 'red',
+                        label: {
+                            text: 'Hoog verbruik',
+                            align: 'right'
+                        }
+                    }];
 					var rangeSelector = false;
 					var navScroll = true;
 					var pointInterval = 60 * 1000;
@@ -235,6 +263,34 @@ function createChart(target, date){
 		                text: 'Watt',
 		                margin: 40
 		            };					
+                    var plotLinesY = [{
+                        value: 180,
+                        dashStyle: 'dash',
+                        width: 2,
+                        color: 'green',
+                        label: {
+                            text: 'Sluip verbruik',
+                            align: 'right'
+                        }
+                    }, {
+                        value: 500,
+                        dashStyle: 'dash',
+                        width: 2,
+                        color: 'orange',
+                        label: {
+                            text: 'Normaal verbruik',
+                            align: 'right'
+                        }
+                    }, {
+                        value: 3000,
+                        dashStyle: 'dash',
+                        width: 2,
+                        color: 'red',
+                        label: {
+                            text: 'Hoog verbruik',
+                            align: 'right'
+                        }
+                    }];
 					var rangeSelector = true;
 					var navScroll = true;
 					var pointInterval = 60 * 1000;
@@ -391,10 +447,11 @@ function createChart(target, date){
 					title: {
 						text : title
 					},	
-					yAxis: {
+					yAxis: [{
 						showFirstLabel: false,
-						title: yTitle
-					},
+						title: yTitle,
+                        plotLines: plotLinesY
+                    }],
 					xAxis: {
 						type: 'datetime',
 						tickInterval: tickInterval,
