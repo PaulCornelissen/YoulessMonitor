@@ -121,9 +121,9 @@ table {
 #settingsOverlay {
 	position:absolute;
 	top:25px;
-	left:-250px;
+	left:-300px;
 	margin-left:50%;
-	width:500px;
+	width:600px;
 	height:400px;
 	border:1px
 solid #e5e5e5;
@@ -412,6 +412,10 @@ solid #3079ED;
 
 input[type=submit]:hover, input[type=button]:hover {
 	background:#3079ED;
+}
+
+input[type=submit] {
+	margin-right: 5px;
 }
 
 input[type=submit].saved {

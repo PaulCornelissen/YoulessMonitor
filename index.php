@@ -175,8 +175,7 @@ foreach($contributors as $k => $v) {
 						<td colspan="3"><br></td>
 					</tr>
 					<tr>
-						<td colspan="2"></td>
-						<td><input type="submit" id="saveSettings" value="Opslaan"/><input type="button" id="hideSettings" value="Sluiten"/></td>
+						<td colspan="3"><input type="submit" id="saveSettings" value="Opslaan"/><input type="button" id="hideSettings" value="Sluiten"/></td>
 					</tr>
 				</table>				
 			</form>	
