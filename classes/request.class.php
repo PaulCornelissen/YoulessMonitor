@@ -45,19 +45,19 @@ class Request {
      */
 	public function getLiveData() {
 	
-		$data['cookie'] = $this->setCurlSession(); 	
+		$data['cookie'] = $this->setCurlSession();
 	
 		$curl = new Curl();
 		
-		$curl->addSession( $this->source.'a'.$this->format, $this->opts );
+		$curl->addSession( $this->source .'a'. $this->format, $this->opts );
 
 		$result = $curl->exec();
-		$curl->clear();		
+		$curl->clear();
 		
 		$this->delCookie();
 		 
 		return $result;
-	} 	
+	}
 	
 
     /**
@@ -121,9 +121,20 @@ class Request {
 
 		// Check for password and delete cookie
 		$this->delCookie();	
+
+		if(VERBOSE) print_r($result);
 		
 		$part1 = json_decode($result[0], true);
 		$part2 = json_decode($result[1], true);
+
+		if(!is_array($part1) || !is_array($part2)) {
+			if(VERBOSE) {
+				echo "a part is not an array in hourdata.\n";
+				print_r($part1);
+				print_r($part2);
+			}
+			return false;
+		}
 
 		$values = array_merge($part2['val'], $part1['val']);
 
@@ -164,7 +175,7 @@ class Request {
 		
 		$curl->addSession( $this->source.'V?w=1'.$this->format, $this->opts );
 		$curl->addSession( $this->source.'V?w=2'.$this->format, $this->opts );
-		$curl->addSession( $this->source.'V?w=3'.$this->format, $this->opts );		
+		$curl->addSession( $this->source.'V?w=3'.$this->format, $this->opts );
 
 		
 		$result = $curl->exec();
@@ -179,6 +190,10 @@ class Request {
 		$part1 = json_decode($result[0], true);
 		$part2 = json_decode($result[1], true);
 		$part3 = json_decode($result[2], true);
+
+		if(!is_array($part1) || !is_array($part2) || !is_array($part3)) {
+			return false;
+		}	
 
 		$values = array_merge($part3['val'],$part2['val'], $part1['val']);
 
@@ -243,6 +258,10 @@ class Request {
 		$part4 = json_decode($result[3], true);
 		$part5 = json_decode($result[4], true);
 		$part6 = json_decode($result[5], true);
+
+		if(!is_array($part1) || !is_array($part2) || !is_array($part3) || !is_array($part4) || !is_array($part5) || !is_array($part6)) {
+			return false;
+		}	
 
 		$values = array_merge($part6['val'],$part5['val'],$part4['val'],$part3['val'],$part2['val'],$part1['val']);		// PART7 REMOVED!!
 

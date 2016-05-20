@@ -34,13 +34,21 @@ if($settings['LastUpdate_UnixTime'] >= time() - $settings['cooldown'])
 	exit(VERBOSE ? "Cooldown active.\n" : "");
 }
 
+// I think data is not used anywhere, but somehow it stops working when I remove this?!
+if(VERBOSE) echo "Getting Live data.\n";
 $liveData = json_decode($request->getLiveData(), true);
 
 
 
-
 // Update data table with 1 min data
+if(VERBOSE) echo "Getting Hour data.\n";
 $data 			= $request->getLastHour();
+
+if($data == false) {
+	$message = "";
+	if(VERBOSE) $message = "Apparently the Youless cannot be reached\n";
+	die($message);
+}
 
 $row 			= explode(",", $data['val']);
 $total 			= count($row);

@@ -26,8 +26,8 @@ Het installatiescript controleert automatisch of aan de voorwaarden is voldaan.
    `0 * * * * /usr/bin/php /home/htdocs/huis/cronjob.php`  
    Zie beneden voor meer uitleg.  
 
-## Update -Op dit moment mogelijk broken!-
-Gebruik deze beschrijving voor een updata vanaf een oudere versie van dit script (van voor dat deze op GitHub stond).
+## Update
+Gebruik deze beschrijving voor een update vanaf een oudere versie van dit script (van voordat deze op GitHub stond).
 
 1. Maak een goede back-up!
 2. Kopieer en vervang de bestanden in de bestaande installatie met de nieuwere versie.
