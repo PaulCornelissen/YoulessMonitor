@@ -53,6 +53,10 @@ along with Youless Monitor.  If not, see <http://www.gnu.org/licenses/>.
 		$errorMsg .= '<p class="error"><b>CURL extension</b> ontbreekt!</p>';
 		$ok = false;
 	}
+	if(!is_writable($settingsFile)) {
+		$errorMsg .= '<p class="error"><b>/inc/settings.inc.php</b> bestand is niet schrijfbaar!</b>';
+		$ok = false;
+	}
 	
 	echo $errorMsg;
 
@@ -89,7 +93,9 @@ define('VERBOSE', " . $debug . ");
 
 			if($debug == 'true') echo "Gegenereerde instellingen:<br>" . nl2br(htmlspecialchars($settings)) . "<br><br>";
 
-			file_put_contents($settingsFile, $settings);
+			if(file_put_contents($settingsFile, $settings) === false) {
+				die(print("<p class='error'>Er is iets mis gegaan bij het schrijven naar het instellingen bestand. Installatie afgebroken.</p>"));
+			}
 
 
 			// We construct a query to create and/or update the database
@@ -273,6 +279,5 @@ define('VERBOSE', " . $debug . ");
 ?>
 			</div>
 		</div>
-	<div id="footer"><?PHP include("inc/date-modified.php");?></div>
 	</body>
 </html>

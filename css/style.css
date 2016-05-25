@@ -195,17 +195,6 @@ a {
 	background:#f1f1f1;
 }
 
-#footer {
-	position:absolute;
-	height: 15px;
-	left:0;
-	bottom:0;
-	width:100%;
-	text-align: right;
-	background:#f1f1f1;
-	;
-}
-
 #version {
 	position:absolute;
 	padding-left:25px;
