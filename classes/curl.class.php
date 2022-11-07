@@ -151,7 +151,6 @@ class Curl
 						$res[] = false;
 						
 					$this->retry = $retry;
-					echo "1\n";
 				}
 				else
 					$res[] = false;

@@ -67,8 +67,8 @@ $liveSelect = $gen->selector('livelengte', $settings['livelengte'], $liveOptions
 $contributors = array(
     '-LA-' => '',
     'J van der Kroon' => '',
-    'Xander' => '',  // rednax70
-    'Michiel Nijkamp' => '', // SmiGuel
+    'Xander' => '', 
+    'Michiel Nijkamp' => '',
     'Paul Cornelissen' => 'http://bit-byters.net/'
 );
 
@@ -194,10 +194,10 @@ foreach($contributors as $k => $v) {
 			<div id="menu">
 				<ul class="btn">
 					<li class="selected"><a href="#" data-chart="live" class="showChart">Live</a></li>
-					<li><a href="#" data-chart="day" class="showChart">Dag</a></li>
-					<li><a href="#" data-chart="week" class="showChart">Week</a></li>
-					<li><a href="#" data-chart="month" class="showChart">Maand</a></li>
-					<li><a href="#" data-chart="year" class="showChart">Jaar</a></li>
+					<li id="day"><a href="#" data-chart="day" class="showChart">Dag</a></li>
+					<li id="week"><a href="#" data-chart="week" class="showChart">Week</a></li>
+					<li id="month"><a href="#" data-chart="month" class="showChart">Maand</a></li>
+					<li id="year"><a href="#" data-chart="year" class="showChart">Jaar</a></li>
 				</ul>
 			</div>
 			

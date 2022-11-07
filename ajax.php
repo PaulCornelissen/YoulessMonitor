@@ -66,9 +66,16 @@ if((isset($_SESSION['user_id']) && $_SESSION['user_id'] != false) || NO_LOGIN)
 		}
 		elseif ( $range == 'year') {
 
-			$begin = date('Y-m-d', strtotime("-1 year",time()));
-			//$end = date('Y-m-d',strtotime("+1 day",strtotime($sqlDate)));
-			$end = date('Y-m-d',strtotime("+1 day",time()));
+			$begin = date('Y-m-d',strtotime("first day of January",strtotime($sqlDate)));
+			$endOfYearTimestamp = strtotime("last day of december",strtotime($sqlDate)) - 86400;
+			$endOfTodayTimestamp = strtotime("+1 day",time());
+			if($endOfTodayTimestamp > $endOfTodayTimestamp) 
+			{
+				$end = date('Y-m-d', $endOfTodayTimestamp);
+			}
+			else {
+				$end = date('Y-m-d', $endOfYearTimestamp);
+			}
 
 			$rows = $db->getSpecificRange($begin, $end);
 		}
@@ -86,37 +93,29 @@ if((isset($_SESSION['user_id']) && $_SESSION['user_id'] != false) || NO_LOGIN)
 			$otime=99999999999999999999;
 			$leeg[] = 0;
 			$prevtime = time();
+			$dataStr = '';
+			$it=0;
 
 			foreach($rows as $k)
 			{
-				$row = explode(",", $k->value);
-				$total = count($row);
+				$total = substr_count($k->value, ",") + 1;
 				
 				if ($k->time < $otime) {
 					$otime = $k->time;
 				}
 
-				$diff = floor(($k->time - $prevtime) / 60) - 1;
+				$diff = floor(($k->time - $prevtime) / 60) - $total;
 				if($i > 0 && $diff > 0) {
 					for($j = 0; $j < $diff; $j++) {
-						$dataAr[] = $leeg;
+						$dataStr .= ',0';
 					}
 				}
 
-				$dataAr[] = $row;
+				$dataStr .= ($i!=0 ? "," : "").$k->value;
+
 				$prevtime = $k->time;
 				$i++;
 			}
-			
-			// Create JS data string
-			$i=0;
-			$dataStr = '';
-			
-			foreach($dataAr as $k)
-			{
-				$dataStr .= ($i!=0 ? "," : "").implode(",", $k);
-				$i++;
-			}	
 			
 			// Output data
 			$startTime = date('Y-m-d-H-i',$otime); 
@@ -292,11 +291,11 @@ if((isset($_SESSION['user_id']) && $_SESSION['user_id'] != false) || NO_LOGIN)
 	}	
 	else
 	{
-		echo "Error!";
+		echo '{"ok": 0, "msg":"Fout: Verkeerd geformuleerd verzoek!"}';
 	}
 }
 else
 {
-	echo "Login required!";
+	echo '{"ok": 0, "msg":"Fout: Login required!"}';
 }
 ?>
